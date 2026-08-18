@@ -15,12 +15,12 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '8' # Raindrop's older Gradle settings require precisely Java 8
+        java-version: '17' # Upgraded to match newer React Native compilation criteria
 
     - name: Set up Node.js Runtime
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22' # Upgraded to fix the EBADENGINE errors completely
         cache: 'npm'
 
     - name: Install Project Dependencies
@@ -32,4 +32,4 @@ jobs:
         cd android
         chmod +x gradlew
         ./gradlew clean
-        ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxPermSize=512m -Dfile.encoding=UTF-8"
+        ./gradlew assembleDebug --no-daemon
