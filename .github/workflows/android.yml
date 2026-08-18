@@ -1,7 +1,7 @@
 name: Android CI Build
 
 on:
-  workflow_dispatch: # Allows you to manually click and trigger the build
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,12 +15,12 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '11' # Changed from 17 to 11 for older React Native compatibility
 
     - name: Set up Node.js Runtime
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '18' # Matches the older project ecosystem
         cache: 'npm'
 
     - name: Install Project Dependencies
@@ -31,10 +31,5 @@ jobs:
       run: |
         cd android
         chmod +x gradlew
-        ./gradlew assembleDebug
-
-    - name: Upload Compiled APK Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Raindrop-Debug-APK
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+        ./gradlew clean # Wipes out conflicting old build caches
+        ./gradlew assembleDebug --no-daemon
